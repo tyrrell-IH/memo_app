@@ -1,7 +1,10 @@
 メモアプリ
-<p><%= @title%>
-<p><%= @text %>
-
+<p><%= @title%></p>
+<p style="white-space: pre-wrap;"><%= @text %></p>
 <form method="get" action="/memos/<%= @memo_id %>/edit">
   <input type="submit" value="変更">
+</form>
+<form method="post" action="/memos/<%= @memo_id %>">
+  <input type="hidden" name="_method" value="DELETE">
+  <input type="submit" value="削除">
 </form>
