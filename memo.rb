@@ -1,10 +1,16 @@
 require 'json'
 require "securerandom"
 require 'sinatra'
-require 'sinatra/reloader'
+require 'sinatra/reloader' if development?
 
 set :environment, :production
 set :method_override, true
+
+helpers do
+  def h(text)
+    Rack::Utils.escape_html(text)
+  end
+end
 
 class Memo
   def initialize(title, text)
@@ -33,7 +39,7 @@ get "/memos/new" do
 end
 
 post "/memos" do
-  new_memo = Memo.new(params[:title], params[:text]).generate_contents
+  new_memo = Memo.new(h(params[:title]), h(params[:text])).generate_contents
   json_file = File.read('memodb.json')
   saved_memos = JSON.load(json_file)
   File.open('memodb.json', 'w') do |file|
@@ -69,7 +75,7 @@ patch "/memos/:memo_id" do
   memo_id = params[:memo_id]
   json_file = File.read('memodb.json')
   saved_memos = JSON.load(json_file)
-  saved_memos[memo_id] = {'title' => params[:title], 'text' => params[:text]}
+  saved_memos[memo_id] = {'title' => h(params[:title]), 'text' => h(params[:text])}
   File.open('memodb.json', 'w') do |file|
     JSON.dump(saved_memos, file)
   end
