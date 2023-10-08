@@ -1,3 +1,4 @@
 Gemfile
 Gemfile.lock
-
+.erb-lint.yml
+.rubocop.yml
