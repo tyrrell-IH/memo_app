@@ -1,4 +1,4 @@
-メモアプリ
+<p>メモアプリ</p>
 <form method="post" action="/memos/<%= @memo_id %>">
   <input type="hidden" name="_method" value="PATCH">
   <label>タイトル</label><br>
@@ -6,4 +6,7 @@
   <label>本文</label><br>
     <textarea name="text"><%= @text %></textarea><br>
   <input type="submit" value="変更">
+</form>
+<form method="get" action="/memos">
+  <input type="submit" value="戻る">
 </form>
