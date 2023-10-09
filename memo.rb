@@ -4,7 +4,6 @@
 require 'json'
 require 'securerandom'
 require 'sinatra'
-require 'sinatra/reloader' if development?
 
 set :environment, :production
 set :method_override, true
