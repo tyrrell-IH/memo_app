@@ -37,10 +37,7 @@ def store_memos(filename, memos)
 end
 
 get '/memos' do
-  memos = take_out_memos(MEMO_DB)
-  @titles = memos.map do |key, values|
-    "<a href=\"/memos/#{key}\">#{values['title']}</a><br>"
-  end.join('')
+  @memos = take_out_memos(MEMO_DB)
   erb :index
 end
 

@@ -2,4 +2,6 @@
 <form method="get" action="/memos/new">
   <input type="submit" value="追加">
 </form>
-<%= @titles %>
+<% @memos.each do |id, values| %>
+  <a href="/memos/<%= id %>"><%= values['title'] %></a><br>
+<% end %>
