@@ -8,6 +8,8 @@ require 'sinatra'
 set :environment, :production
 set :method_override, true
 
+MEMO_DB = 'memodb.json'
+
 helpers do
   def h(text)
     Rack::Utils.escape_html(text)
@@ -35,7 +37,7 @@ def store_memos(filename, memos)
 end
 
 get '/memos' do
-  memos = take_out_memos('memodb.json')
+  memos = take_out_memos(MEMO_DB)
   @titles = memos.map do |key, values|
     "<a href=\"/memos/#{key}\">#{values['title']}</a><br>"
   end.join('')
@@ -48,15 +50,15 @@ end
 
 post '/memos' do
   new_memo = create_memo(h(params[:title]), h(params[:text]))
-  memos = take_out_memos('memodb.json')
+  memos = take_out_memos(MEMO_DB)
   memos.merge!(new_memo)
-  store_memos('memodb.json', memos)
+  store_memos(MEMO_DB, memos)
   redirect '/memos'
 end
 
 get '/memos/:memo_id' do
   @memo_id = params[:memo_id]
-  memos = take_out_memos('memodb.json')
+  memos = take_out_memos(MEMO_DB)
   @title = memos[@memo_id]['title']
   @text = memos[@memo_id]['text']
   erb :detail
@@ -64,7 +66,7 @@ end
 
 get '/memos/:memo_id/edit' do
   @memo_id = params[:memo_id]
-  memos = take_out_memos('memodb.json')
+  memos = take_out_memos(MEMO_DB)
   @title = memos[@memo_id]['title']
   @text = memos[@memo_id]['text']
   erb :edit
@@ -72,16 +74,16 @@ end
 
 patch '/memos/:memo_id' do
   memo_id = params[:memo_id]
-  memos = take_out_memos('memodb.json')
+  memos = take_out_memos(MEMO_DB)
   memos[memo_id] = { 'title' => h(params[:title]), 'text' => h(params[:text]) }
-  store_memos('memodb.json', memos)
+  store_memos(MEMO_DB, memos)
   redirect '/memos'
 end
 
 delete '/memos/:memo_id' do
   memo_id = params[:memo_id]
-  memos = take_out_memos('memodb.json')
+  memos = take_out_memos(MEMO_DB)
   memos.delete(memo_id)
-  store_memos('memodb.json', memos)
+  store_memos(MEMO_DB, memos)
   redirect '/memos'
 end
