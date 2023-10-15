@@ -35,18 +35,8 @@ bundle -v
 gem install bundler
 ```
 でbundlerをインストールしてください
-### bundle init
+### bundle install
 `memo_app`ディレクトリ上で
-```
-bundle init
-```
-を実行してください。`bundle init`後に`Gemfile`が作成されるので、`Gemfile` 内に
-```
-gem 'sinatra'
-gem 'webrick'
-```
-を追記してください。
-追記後
 ```
 bundle install
 ```
