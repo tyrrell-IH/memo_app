@@ -1,6 +1,6 @@
 <p>-保存した内容-</p>
-<p><%= @title %></p>
-<p style="white-space: pre-wrap;"><%= @text %></p>
+<p><%= h @title %></p>
+<p style="white-space: pre-wrap;"><%= h @text %></p>
 <form method="get" action="/memos/<%= @memo_id %>/edit">
   <input type="submit" value="変更">
 </form>

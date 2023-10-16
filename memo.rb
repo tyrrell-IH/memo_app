@@ -46,7 +46,7 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  new_memo = create_memo(h(params[:title]), h(params[:text]))
+  new_memo = create_memo(params[:title], params[:text])
   memos = take_out_memos(MEMO_DB)
   memos.merge!(new_memo)
   store_memos(MEMO_DB, memos)
@@ -72,7 +72,7 @@ end
 patch '/memos/:memo_id' do
   memo_id = params[:memo_id]
   memos = take_out_memos(MEMO_DB)
-  memos[memo_id] = { 'title' => h(params[:title]), 'text' => h(params[:text]) }
+  memos[memo_id] = { 'title' => params[:title], 'text' => params[:text] }
   store_memos(MEMO_DB, memos)
   redirect '/memos'
 end
