@@ -1,13 +1,9 @@
 <p>-保存した内容-</p>
 <p><%= h @title %></p>
 <p style="white-space: pre-wrap;"><%= h @text %></p>
-<form method="get" action="/memos/<%= @memo_id %>/edit">
-  <input type="submit" value="変更">
-</form>
 <form method="post" action="/memos/<%= @memo_id %>">
   <input type="hidden" name="_method" value="DELETE">
   <input type="submit" value="削除">
 </form>
-<form method="get" action="/memos">
-  <input type="submit" value="戻る">
-</form>
+<a href="/memos/<%= @memo_id %>/edit">変更</a>
+<a href="/memos">戻る</a>

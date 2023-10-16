@@ -1,7 +1,8 @@
 <p>メモアプリ</p>
-<form method="get" action="/memos/new">
-  <input type="submit" value="追加">
-</form>
-<% @memos.each do |id, values| %>
-  <a href="/memos/<%= id %>"><%= h values['title'] %></a><br>
-<% end %>
+<a href="/memos/new">追加</a>
+
+<ul>
+  <% @memos.each do |id, values| %>
+    <li><a href="/memos/<%= id %>"><%= h values['title'] %></a></li>
+  <% end %>
+</ul>
