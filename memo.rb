@@ -19,9 +19,12 @@ end
 
 class MemoDB
   @@conn = PG.connect(host: "localhost", user: "postgres", password: "未設定", dbname: "memo")
-  def pull_out_memos
+
+  def pull_out
     @@conn.exec("SELECT * FROM Memos;")
   end
+
+  def
 end
 
 # def create_memo(title, text)
@@ -38,14 +41,14 @@ end
 #   end
 # end
 
-def store_memos(filename, memos)
-  File.open(filename, 'w') do |file|
-    JSON.dump(memos, file)
-  end
+# def store_memos(filename, memos)
+#   File.open(filename, 'w') do |file|
+#     JSON.dump(memos, file)
+#   end
 end
 
 get '/memos' do
-  @memos = MemoDB.new.pull_out_memos
+  @memos = MemoDB.new.pull_out
   erb :index
 end
 
