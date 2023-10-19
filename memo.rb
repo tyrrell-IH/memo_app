@@ -4,6 +4,7 @@
 require 'json'
 require 'securerandom'
 require 'sinatra'
+require 'pg'
 
 set :environment, :production
 set :method_override, true
@@ -16,19 +17,26 @@ helpers do
   end
 end
 
-def create_memo(title, text)
-  memo_id = SecureRandom.hex.to_s
-  { memo_id => { 'title' => title, 'text' => text } }
-end
-
-def take_out_memos(filename)
-  file = File.read(filename)
-  if file.empty?
-    {}
-  else
-    JSON.parse(file)
+class MemoDB
+  @@conn = PG.connect(host: "localhost", user: "postgres", password: "未設定", dbname: "memo")
+  def pull_out_memos
+    @@conn.exec("SELECT * FROM Memos;")
   end
 end
+
+# def create_memo(title, text)
+#   memo_id = SecureRandom.hex.to_s
+#   { memo_id => { 'title' => title, 'text' => text } }
+# end
+
+# def take_out_memos(filename)
+#   file = File.read(filename)
+#   if file.empty?
+#     {}
+#   else
+#     JSON.parse(file)
+#   end
+# end
 
 def store_memos(filename, memos)
   File.open(filename, 'w') do |file|
@@ -37,7 +45,7 @@ def store_memos(filename, memos)
 end
 
 get '/memos' do
-  @memos = take_out_memos(MEMO_DB)
+  @memos = MemoDB.new.pull_out_memos
   erb :index
 end
 
