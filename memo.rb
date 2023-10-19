@@ -24,7 +24,9 @@ class MemoDB
     @@conn.exec("SELECT * FROM Memos;")
   end
 
-  def
+  def insert(title, text)
+    @@conn.exec("INSERT INTO Memos (title, text) VALUES ('#{title}', '#{text}');")
+  end
 end
 
 # def create_memo(title, text)
@@ -45,7 +47,7 @@ end
 #   File.open(filename, 'w') do |file|
 #     JSON.dump(memos, file)
 #   end
-end
+# end
 
 get '/memos' do
   @memos = MemoDB.new.pull_out
@@ -57,10 +59,11 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  new_memo = create_memo(params[:title], params[:text])
-  memos = take_out_memos(MEMO_DB)
-  memos.merge!(new_memo)
-  store_memos(MEMO_DB, memos)
+  MemoDB.new.insert(params[:title], params[:text])
+  # new_memo = create_memo(params[:title], params[:text])
+  # memos = take_out_memos(MEMO_DB)
+  # memos.merge!(new_memo)
+  # store_memos(MEMO_DB, memos)
   redirect '/memos'
 end
 
