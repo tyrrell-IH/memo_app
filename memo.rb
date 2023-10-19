@@ -27,6 +27,11 @@ class MemoDB
   def insert(title, text)
     @@conn.exec("INSERT INTO Memos (title, text) VALUES ('#{title}', '#{text}');")
   end
+
+  def find(memo_id)
+    memos = @@conn.exec("SELECT * FROM Memos;")
+    memos.find{|memo| memo['id'] == memo_id}
+  end
 end
 
 get '/memos' do
@@ -44,10 +49,7 @@ post '/memos' do
 end
 
 get '/memos/:memo_id' do
-  @memo_id = params[:memo_id]
-  memos = take_out_memos(MEMO_DB)
-  @title = memos[@memo_id]['title']
-  @text = memos[@memo_id]['text']
+  @memo = MemoDB.new.find(params[:memo_id])
   erb :detail
 end
 
