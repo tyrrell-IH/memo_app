@@ -29,26 +29,6 @@ class MemoDB
   end
 end
 
-# def create_memo(title, text)
-#   memo_id = SecureRandom.hex.to_s
-#   { memo_id => { 'title' => title, 'text' => text } }
-# end
-
-# def take_out_memos(filename)
-#   file = File.read(filename)
-#   if file.empty?
-#     {}
-#   else
-#     JSON.parse(file)
-#   end
-# end
-
-# def store_memos(filename, memos)
-#   File.open(filename, 'w') do |file|
-#     JSON.dump(memos, file)
-#   end
-# end
-
 get '/memos' do
   @memos = MemoDB.new.pull_out
   erb :index
@@ -60,10 +40,6 @@ end
 
 post '/memos' do
   MemoDB.new.insert(params[:title], params[:text])
-  # new_memo = create_memo(params[:title], params[:text])
-  # memos = take_out_memos(MEMO_DB)
-  # memos.merge!(new_memo)
-  # store_memos(MEMO_DB, memos)
   redirect '/memos'
 end
 
