@@ -32,6 +32,10 @@ class MemoDB
     memos = @@conn.exec("SELECT * FROM Memos;")
     memos.find{|memo| memo['id'] == memo_id}
   end
+
+  def update(memo_id, title, text)
+    @@conn.exec("UPDATE Memos SET title = '#{title}', text = '#{text}' WHERE id = #{memo_id};")
+  end
 end
 
 get '/memos' do
@@ -59,10 +63,7 @@ get '/memos/:memo_id/edit' do
 end
 
 patch '/memos/:memo_id' do
-  memo_id = params[:memo_id]
-  memos = take_out_memos(MEMO_DB)
-  memos[memo_id] = { 'title' => params[:title], 'text' => params[:text] }
-  store_memos(MEMO_DB, memos)
+  MemoDB.new.update(params[:memo_id], params[:title], params[:text])
   redirect '/memos'
 end
 
