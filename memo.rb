@@ -17,7 +17,7 @@ class MemoDB
   @@conn = PG.connect(host: "localhost", user: "postgres", password: "未設定", dbname: "memo")
 
   def pull_out
-    @@conn.exec("SELECT * FROM Memos;")
+    @@conn.exec("SELECT * FROM Memos ORDER BY id;")
   end
 
   def insert(title, text)
