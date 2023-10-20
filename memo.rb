@@ -1,15 +1,11 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'json'
-require 'securerandom'
 require 'sinatra'
 require 'pg'
 
 set :environment, :production
 set :method_override, true
-
-MEMO_DB = 'memodb.json'
 
 helpers do
   def h(text)
