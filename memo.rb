@@ -54,10 +54,7 @@ get '/memos/:memo_id' do
 end
 
 get '/memos/:memo_id/edit' do
-  @memo_id = params[:memo_id]
-  memos = take_out_memos(MEMO_DB)
-  @title = memos[@memo_id]['title']
-  @text = memos[@memo_id]['text']
+  @memo = MemoDB.new.find(params[:memo_id])
   erb :edit
 end
 
