@@ -36,6 +36,10 @@ class MemoDB
   def update(memo_id, title, text)
     @@conn.exec("UPDATE Memos SET title = '#{title}', text = '#{text}' WHERE id = #{memo_id};")
   end
+
+  def delete(memo_id)
+    @@conn.exec("DELETE FROM Memos WHERE id = #{memo_id}")
+  end
 end
 
 get '/memos' do
@@ -68,9 +72,6 @@ patch '/memos/:memo_id' do
 end
 
 delete '/memos/:memo_id' do
-  memo_id = params[:memo_id]
-  memos = take_out_memos(MEMO_DB)
-  memos.delete(memo_id)
-  store_memos(MEMO_DB, memos)
+  MemoDB.new.delete(params[:memo_id])
   redirect '/memos'
 end
