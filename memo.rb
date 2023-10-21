@@ -21,7 +21,7 @@ class MemoDB
   end
 
   def self.insert(title, text)
-    @@conn.exec("INSERT INTO Memos (title, text) VALUES ('#{title}', '#{text}');")
+    @@conn.exec_params("INSERT INTO Memos (title, text) VALUES ($1, $2);", [title, text])
   end
 
   def self.find(memo_id)
@@ -30,11 +30,11 @@ class MemoDB
   end
 
   def self.update(memo_id, title, text)
-    @@conn.exec("UPDATE Memos SET title = '#{title}', text = '#{text}' WHERE id = #{memo_id};")
+    @@conn.exec_params("UPDATE Memos SET title = $1, text = $2 WHERE id = $3;", [title, text, memo_id])
   end
 
   def self.delete(memo_id)
-    @@conn.exec("DELETE FROM Memos WHERE id = #{memo_id}")
+    @@conn.exec_params("DELETE FROM Memos WHERE id = $1;", [memo_id])
   end
 end
 
