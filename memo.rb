@@ -16,30 +16,30 @@ end
 class MemoDB
   @@conn = PG.connect(host: "localhost", user: "postgres", password: "未設定", dbname: "memo")
 
-  def pull_out
+  def self.pull_out
     @@conn.exec("SELECT * FROM Memos ORDER BY id;")
   end
 
-  def insert(title, text)
+  def self.insert(title, text)
     @@conn.exec("INSERT INTO Memos (title, text) VALUES ('#{title}', '#{text}');")
   end
 
-  def find(memo_id)
+  def self.find(memo_id)
     memos = @@conn.exec("SELECT * FROM Memos;")
     memos.find{|memo| memo['id'] == memo_id}
   end
 
-  def update(memo_id, title, text)
+  def self.update(memo_id, title, text)
     @@conn.exec("UPDATE Memos SET title = '#{title}', text = '#{text}' WHERE id = #{memo_id};")
   end
 
-  def delete(memo_id)
+  def self.delete(memo_id)
     @@conn.exec("DELETE FROM Memos WHERE id = #{memo_id}")
   end
 end
 
 get '/memos' do
-  @memos = MemoDB.new.pull_out
+  @memos = MemoDB.pull_out
   erb :index
 end
 
@@ -48,26 +48,26 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  MemoDB.new.insert(params[:title], params[:text])
+  MemoDB.insert(params[:title], params[:text])
   redirect '/memos'
 end
 
 get '/memos/:memo_id' do
-  @memo = MemoDB.new.find(params[:memo_id])
+  @memo = MemoDB.find(params[:memo_id])
   erb :detail
 end
 
 get '/memos/:memo_id/edit' do
-  @memo = MemoDB.new.find(params[:memo_id])
+  @memo = MemoDB.find(params[:memo_id])
   erb :edit
 end
 
 patch '/memos/:memo_id' do
-  MemoDB.new.update(params[:memo_id], params[:title], params[:text])
+  MemoDB.update(params[:memo_id], params[:title], params[:text])
   redirect '/memos'
 end
 
 delete '/memos/:memo_id' do
-  MemoDB.new.delete(params[:memo_id])
+  MemoDB.delete(params[:memo_id])
   redirect '/memos'
 end
