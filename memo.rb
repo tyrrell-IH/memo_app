@@ -14,27 +14,27 @@ helpers do
 end
 
 class MemoDB
-  @@conn = PG.connect(host: "localhost", user: "postgres", password: "未設定", dbname: "memo")
+  @conn = PG.connect(host: 'localhost', user: 'postgres', dbname: 'memo')
 
   def self.pull_out
-    @@conn.exec("SELECT * FROM Memos ORDER BY id;")
+    @conn.exec('SELECT * FROM Memos ORDER BY id;')
   end
 
   def self.insert(title, text)
-    @@conn.exec_params("INSERT INTO Memos (title, text) VALUES ($1, $2);", [title, text])
+    @conn.exec_params('INSERT INTO Memos (title, text) VALUES ($1, $2);', [title, text])
   end
 
   def self.find(memo_id)
-    memos = @@conn.exec("SELECT * FROM Memos;")
-    memos.find{|memo| memo['id'] == memo_id}
+    memos = @conn.exec('SELECT * FROM Memos;')
+    memos.find { |memo| memo['id'] == memo_id }
   end
 
   def self.update(memo_id, title, text)
-    @@conn.exec_params("UPDATE Memos SET title = $1, text = $2 WHERE id = $3;", [title, text, memo_id])
+    @conn.exec_params('UPDATE Memos SET title = $1, text = $2 WHERE id = $3;', [title, text, memo_id])
   end
 
   def self.delete(memo_id)
-    @@conn.exec_params("DELETE FROM Memos WHERE id = $1;", [memo_id])
+    @conn.exec_params('DELETE FROM Memos WHERE id = $1;', [memo_id])
   end
 end
 
