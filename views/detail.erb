@@ -1,5 +1,6 @@
-<p>-保存した内容-</p>
+<p>---タイトル----</p>
 <p><%= h @memo['title'] %></p>
+<p>------本文------</p>
 <p style="white-space: pre-wrap;"><%= h @memo['text'] %></p>
 <form method="post" action="/memos/<%= @memo['id'] %>">
   <input type="hidden" name="_method" value="DELETE">
