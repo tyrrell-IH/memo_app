@@ -2,10 +2,10 @@
 <form method="post" action="/memos/<%= @memo['id'] %>">
   <input type="hidden" name="_method" value="PATCH">
   <label>タイトル</label><br>
-    <input type="text" name="title" value="<%= h @memo['title'] %>"><br>
+    <input type="text" name="title" value="<%= h @memo['title'] %>" required minlength="1" maxlength="20"><br>
     <br>
   <label>本文</label><br>
-    <textarea name="text"><%= h @memo['text'] %></textarea><br>
+    <textarea name="text" maxlength="120"><%= h @memo['text'] %></textarea><br>
     <br>
   <input type="submit" value="変更">
 </form>
