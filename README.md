@@ -23,7 +23,7 @@ git clone https://github.com/tyrrell-IH/memo_app.git
 ```
 git checkout -b db_dev origin/db_dev
 ```
-を実行しdevブランチを取り込む必要があります。
+を実行しdb_devブランチを取り込む必要があります。
 
 ## データベースを用意する
 ### PostgreSQLのインストール
@@ -50,21 +50,21 @@ PRIMARY KEY (id));
 ```
 これでデータベース、テーブルの作成は終了ですので、`\q`でPostgreSQLを終了して構いません。
 
-## bundler
-### bundleのインストール
+## Bundler
+### Bundleのインストール
 このメモアプリでは各Gemの依存関係の解決のためBundlerを使用します。
 ターミナル上で
 ```
 bundle -v
 ```
-を実行し、bundlerがインストールされているか確認してください。
+を実行し、Bundlerがインストールされているか確認してください。
 インストールされていない場合は
 ```
 gem install bundler
 ```
-でbundlerをインストールしてください
+でBundlerをインストールしてください
 ### bundle install
-`memo_app`ディレクトリ上で
+Gemfileに記載されているGemをインストールするため、`memo_app`ディレクトリ上で
 ```
 bundle install
 ```
