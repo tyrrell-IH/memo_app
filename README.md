@@ -16,6 +16,8 @@ git clone https://github.com/tyrrell-IH/memo_app.git
 ```
 を実行します。
 
+インストールが成功すると`memo_app`ディレクトリが作成されるので`memo_app`ディレクトリへ移動します。
+
 **注意**
 現在mainブランチにdb_devブランチ（DB開発ブランチ）がマージされていない状態なので、上記git cloneの実行のみでは不完全な状態でのインストールになります。
 ```
@@ -23,26 +25,6 @@ git checkout -b db_dev origin/db_dev
 ```
 を実行しdevブランチを取り込む必要があります。
 
-
-インストールが成功すると`memo_app`ディレクトリが作成されるので`memo_app`ディレクトリへ移動します。
-### bundler
-このメモアプリでは各Gemの依存関係の解決のためBundlerを使用します。
-ターミナル上で
-```
-bundle -v
-```
-を実行し、bundlerがインストールされているか確認してください。
-インストールされていない場合は
-```
-gem install bundler
-```
-でbundlerをインストールしてください
-### bundle install
-`memo_app`ディレクトリ上で
-```
-bundle install
-```
-を実行してください。
 ## データベースを用意する
 ### PostgreSQLのインストール
 このメモアプリではデータベース(関係データベース管理システム)として`PostgreSQL`を使用します。
@@ -50,7 +32,6 @@ bundle install
 
 参考：[ダウンロード \| 日本PostgreSQLユーザ会](https://www.postgresql.jp/download)
 
-初期ユーザ(ユーザー名`postgres`)でログインできる状態にしてください。
 ### データベースの作成
 PostgreSQL上に`memo`という名称のデータベースを作成します。PostgreSQLにログイン後以下のSQL文を実行してください
 ```sql
@@ -68,6 +49,26 @@ text VARCHAR(120),
 PRIMARY KEY (id));
 ```
 これでデータベース、テーブルの作成は終了ですので、`\q`でPostgreSQLを終了して構いません。
+
+## bundler
+### bundleのインストール
+このメモアプリでは各Gemの依存関係の解決のためBundlerを使用します。
+ターミナル上で
+```
+bundle -v
+```
+を実行し、bundlerがインストールされているか確認してください。
+インストールされていない場合は
+```
+gem install bundler
+```
+でbundlerをインストールしてください
+### bundle install
+`memo_app`ディレクトリ上で
+```
+bundle install
+```
+を実行してください。
 
 ## メモアプリを使用する
 ### メモアプリの起動
