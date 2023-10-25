@@ -14,7 +14,7 @@ helpers do
 end
 
 class MemoDB
-  @conn = PG.connect(host: 'localhost', user: 'postgres', dbname: 'memo')
+  @conn = PG.connect(dbname: 'memo')
 
   def self.pull_out
     @conn.exec('SELECT * FROM Memos ORDER BY id;')
