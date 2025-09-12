@@ -1,14 +1,11 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'json'
-require 'securerandom'
 require 'sinatra'
+require 'pg'
 
 set :environment, :production
 set :method_override, true
-
-MEMO_DB = 'memodb.json'
 
 helpers do
   def h(text)
@@ -16,28 +13,33 @@ helpers do
   end
 end
 
-def create_memo(title, text)
-  memo_id = SecureRandom.hex.to_s
-  { memo_id => { 'title' => title, 'text' => text } }
-end
+class MemoDB
+  @conn = PG.connect(dbname: 'memo')
 
-def take_out_memos(filename)
-  file = File.read(filename)
-  if file.empty?
-    {}
-  else
-    JSON.parse(file)
+  def self.pull_out
+    @conn.exec('SELECT * FROM Memos ORDER BY id;')
   end
-end
 
-def store_memos(filename, memos)
-  File.open(filename, 'w') do |file|
-    JSON.dump(memos, file)
+  def self.insert(title, text)
+    @conn.exec_params('INSERT INTO Memos (title, text) VALUES ($1, $2);', [title, text])
+  end
+
+  def self.find(memo_id)
+    memos = @conn.exec('SELECT * FROM Memos;')
+    memos.find { |memo| memo['id'] == memo_id }
+  end
+
+  def self.update(memo_id, title, text)
+    @conn.exec_params('UPDATE Memos SET title = $1, text = $2 WHERE id = $3;', [title, text, memo_id])
+  end
+
+  def self.delete(memo_id)
+    @conn.exec_params('DELETE FROM Memos WHERE id = $1;', [memo_id])
   end
 end
 
 get '/memos' do
-  @memos = take_out_memos(MEMO_DB)
+  @memos = MemoDB.pull_out
   erb :index
 end
 
@@ -46,41 +48,26 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  new_memo = create_memo(params[:title], params[:text])
-  memos = take_out_memos(MEMO_DB)
-  memos.merge!(new_memo)
-  store_memos(MEMO_DB, memos)
+  MemoDB.insert(params[:title], params[:text])
   redirect '/memos'
 end
 
 get '/memos/:memo_id' do
-  @memo_id = params[:memo_id]
-  memos = take_out_memos(MEMO_DB)
-  @title = memos[@memo_id]['title']
-  @text = memos[@memo_id]['text']
+  @memo = MemoDB.find(params[:memo_id])
   erb :detail
 end
 
 get '/memos/:memo_id/edit' do
-  @memo_id = params[:memo_id]
-  memos = take_out_memos(MEMO_DB)
-  @title = memos[@memo_id]['title']
-  @text = memos[@memo_id]['text']
+  @memo = MemoDB.find(params[:memo_id])
   erb :edit
 end
 
 patch '/memos/:memo_id' do
-  memo_id = params[:memo_id]
-  memos = take_out_memos(MEMO_DB)
-  memos[memo_id] = { 'title' => params[:title], 'text' => params[:text] }
-  store_memos(MEMO_DB, memos)
+  MemoDB.update(params[:memo_id], params[:title], params[:text])
   redirect '/memos'
 end
 
 delete '/memos/:memo_id' do
-  memo_id = params[:memo_id]
-  memos = take_out_memos(MEMO_DB)
-  memos.delete(memo_id)
-  store_memos(MEMO_DB, memos)
+  MemoDB.delete(params[:memo_id])
   redirect '/memos'
 end

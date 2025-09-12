@@ -1,12 +1,12 @@
 <p>メモアプリ</p>
-<form method="post" action="/memos/<%= @memo_id %>">
+<form method="post" action="/memos/<%= @memo['id'] %>">
   <input type="hidden" name="_method" value="PATCH">
   <label>タイトル</label><br>
-    <input type="text" name="title" value="<%= h @title %>"><br>
+    <input type="text" name="title" value="<%= h @memo['title'] %>" required minlength="1" maxlength="20"><br>
     <br>
   <label>本文</label><br>
-    <textarea name="text"><%= h @text %></textarea><br>
+    <textarea name="text" maxlength="120"><%= h @memo['text'] %></textarea><br>
     <br>
   <input type="submit" value="変更">
 </form>
-<a href="/memos/<%= @memo_id %>">戻る</a>
+<a href="/memos/<%= @memo['id'] %>">戻る</a>
